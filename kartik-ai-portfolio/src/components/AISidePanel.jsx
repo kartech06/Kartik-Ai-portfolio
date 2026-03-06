@@ -79,9 +79,12 @@ export default function AISidePanel() {
             className={`ai-panel glass ${fullscreen ? "fullscreen" : ""}`}
           >
             <div className="ai-panel-header">
-              <span>AI Evaluation Panel</span>
+              <div className="ai-header-left">
+                <div className="ai-avatar">AI</div>
+                <span>Portfolio AI Assistant</span>
+              </div>
 
-              <div>
+              <div className="ai-header-actions">
                 <button onClick={() => setFullscreen(!fullscreen)}>⤢</button>
                 <button onClick={() => setOpen(false)}>−</button>
               </div>
@@ -90,7 +93,16 @@ export default function AISidePanel() {
             <div ref={messagesRef} className="ai-messages">
               {messages.map((msg, i) => (
                 <div key={i} className={`ai-msg ${msg.role}`}>
-                  {msg.text}
+                  <div className="bubble">{msg.text}</div>
+
+                  {msg.role === "assistant" && (
+                    <button
+                      className="copy-btn"
+                      onClick={() => navigator.clipboard.writeText(msg.text)}
+                    >
+                      ⧉
+                    </button>
+                  )}
                 </div>
               ))}
 
