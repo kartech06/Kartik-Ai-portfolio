@@ -7,6 +7,7 @@ import "./index.css";
 
 let lenisInstance = null;
 
+
 /* ================= Smooth Scroll ================= */
 function useSmoothScroll() {
   useEffect(() => {
@@ -36,35 +37,34 @@ function useSmoothScroll() {
 function MinimalCore() {
   const mesh = useRef();
 
-useFrame((state, delta) => {
-  if (!mesh.current) return;
+  useFrame((state, delta) => {
+    if (!mesh.current) return;
 
-  // Base rotation
-  mesh.current.rotation.y += delta * 0.25;
-  mesh.current.rotation.x += delta * 0.1;
+    // Base rotation
+    mesh.current.rotation.y += delta * 0.25;
+    mesh.current.rotation.x += delta * 0.1;
 
-  // Smooth mouse interaction
-  const targetX = state.mouse.x * 0.8;
-  const targetY = state.mouse.y * 0.5;
+    // Smooth mouse interaction
+    const targetX = state.mouse.x * 0.8;
+    const targetY = state.mouse.y * 0.5;
 
-  mesh.current.position.x += (targetX - mesh.current.position.x) * 0.05;
-  mesh.current.position.y += (targetY - mesh.current.position.y) * 0.05;
+    mesh.current.position.x += (targetX - mesh.current.position.x) * 0.05;
+    mesh.current.position.y += (targetY - mesh.current.position.y) * 0.05;
 
-  mesh.current.position.z =
-  -Math.abs(state.mouse.x) * 0.2;
-});
+    mesh.current.position.z = -Math.abs(state.mouse.x) * 0.2;
+  });
 
   return (
     <Float speed={2} rotationIntensity={0.6} floatIntensity={1}>
       <mesh ref={mesh}>
         <torusKnotGeometry args={[1.6, 0.4, 128, 32]} />
         <meshStandardMaterial
-        color="#c9c9c9"
-        metalness={1}
-        roughness={0.15}
-        envMapIntensity={2}
+          color="#c9c9c9"
+          metalness={1}
+          roughness={0.15}
+          envMapIntensity={2}
         />
-        </mesh>
+      </mesh>
     </Float>
   );
 }
@@ -76,21 +76,11 @@ function Scene() {
       <directionalLight position={[5, 5, 5]} intensity={1.2} />
       <pointLight position={[-5, -5, -5]} intensity={0.8} />
 
-      <Stars
-        radius={80}
-        depth={40}
-        count={1000}
-        factor={2}
-        fade
-      />
+      <Stars radius={80} depth={40} count={1000} factor={2} fade />
       <pointLight position={[0, 0, 5]} intensity={1.2} />
       <MinimalCore />
 
-      <OrbitControls
-        enableZoom={false}
-        autoRotate
-        autoRotateSpeed={0.35}
-      />
+      <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.35} />
     </>
   );
 }
@@ -108,6 +98,19 @@ function AISidePanel() {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesRef = useRef(null);
+  const [suggestions, setSuggestions] = useState([
+  "What kind of systems has Kartik built?",
+  "Explain Kartik's backend architecture skills",
+  "What AI projects has Kartik worked on?",
+  "What technologies does Kartik specialize in?",
+]);
+const inputRef = useRef(null);
+const handleSuggestion = (text) => {
+  setInput(text); // paste into input
+  // remove clicked suggestion
+  setSuggestions((prev) => prev.filter((s) => s !== text));
+  inputRef.current?.focus();
+};
 
   /* Stop main scroll when hovering AI */
   const handleMouseEnter = () => {
@@ -205,9 +208,20 @@ function AISidePanel() {
               )}
             </div>
 
+            {suggestions.length > 0 && messages.length === 1 && (
+              <div className="ai-suggestions">
+                {suggestions.map((q, i) => (
+                  <button key={i} onClick={() => handleSuggestion(q)}>
+                    {q}
+                  </button>
+                ))}
+              </div>
+            )}
+
             <div className="ai-input">
               <input
                 value={input}
+                ref={inputRef}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                 placeholder="Ask about architecture..."
@@ -233,53 +247,104 @@ export default function App() {
             <Scene />
           </Suspense>
         </Canvas>
+        <motion.div
+          className="hero-text"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.15 } },
+          }}
+        >
+          <motion.h1
+            variants={{
+              hidden: { opacity: 0, y: 40 },
+              visible: { opacity: 1, y: 0 },
+            }}
+          >
+            Hi, I'm <span className="highlight">Kartik Mehta</span>.
+          </motion.h1>
 
-<motion.div
-  className="hero-text"
-  initial="hidden"
-  animate="visible"
-  variants={{
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.15,
-      },
-    },
-  }}
->
-<motion.h1
-  variants={{
-    hidden: { opacity: 0, y: 40 },
-    visible: { opacity: 1, y: 0 },
-  }}
-  transition={{ duration: 1 }}
->
-  Evaluate me <br />
-  through my <span className="highlight">AI.</span>
-</motion.h1>
+          <motion.h2
+            variants={{
+              hidden: { opacity: 0, y: 40 },
+              visible: { opacity: 1, y: 0 },
+            }}
+          >
+            Backend & AI Engineer
+          </motion.h2>
 
-  <motion.p
-    variants={{
-      hidden: { opacity: 0, y: 30 },
-      visible: { opacity: 1, y: 0 },
-    }}
-    transition={{ duration: 1 }}
-  >
-    Backend & AI Engineer focused on scalable systems and intelligent
-    architecture.
-  </motion.p>
-</motion.div>
+          <motion.p
+            variants={{
+              hidden: { opacity: 0, y: 30 },
+              visible: { opacity: 1, y: 0 },
+            }}
+          >
+            I build scalable backend systems, distributed architectures and
+            AI-powered platforms. You can explore my experience, projects and
+            technical thinking through my AI assistant.
+          </motion.p>
+        </motion.div>
       </section>
 
       <AISidePanel />
 
       <section className="section">
         <div className="container">
-          <h2>Architecture Mindset</h2>
+          <h2>About Me</h2>
           <p>
-            I build distributed systems with scalability, reliability and
-            observability in mind.
+            I'm a backend-focused software engineer with experience building
+            scalable distributed systems, automation platforms and AI-driven
+            applications. My work focuses on performance, reliability and clean
+            architecture.
           </p>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <h2>Core Skills</h2>
+
+          <div className="skills-grid">
+            <div>Node.js</div>
+            <div>System Design</div>
+            <div>Microservices</div>
+            <div>AI / LLM Integration</div>
+            <div>MongoDB</div>
+            <div>AWS</div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <h2>Selected Work</h2>
+
+          <div className="project-grid">
+            <div className="project-card">
+              <h3>AI Monetization Platform</h3>
+              <p>
+                AI-driven monetization engine designed to integrate LLMs with
+                scalable backend services.
+              </p>
+            </div>
+
+            <div className="project-card">
+              <h3>Distributed Microservices System</h3>
+              <p>
+                High-performance backend architecture using Node.js,
+                event-driven services and scalable APIs.
+              </p>
+            </div>
+
+            <div className="project-card">
+              <h3>AI Email Intelligence Agent</h3>
+              <p>
+                AI automation agent that analyzes and summarizes emails using
+                LLM pipelines.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
