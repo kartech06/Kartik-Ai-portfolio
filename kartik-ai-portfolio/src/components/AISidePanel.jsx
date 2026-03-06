@@ -41,26 +41,50 @@ export default function AISidePanel() {
     inputRef.current?.focus();
   };
 
-  const sendMessage = () => {
-    if (!input.trim()) return;
+const sendMessage = () => {
+  if (!input.trim()) return;
 
-    const userMessage = { role: "user", text: input };
+  const userMessage = { role: "user", text: input };
+  setMessages((prev) => [...prev, userMessage]);
+  setInput("");
 
-    setMessages((prev) => [...prev, userMessage]);
+  const fullReply =
+    "Kartik designs scalable backend systems using Node.js, microservices, distributed architectures and AI-driven automation pipelines.";
 
-    setInput("");
+  setIsTyping(true);
 
-    const reply =
-      "Kartik designs scalable backend systems using Node.js, microservices, distributed architectures and AI-driven automation pipelines.";
+  setTimeout(() => {
+    setIsTyping(false);
 
-    setIsTyping(true);
+    let index = 0;
 
-    setTimeout(() => {
-      setIsTyping(false);
+    const typingInterval = setInterval(() => {
+      index++;
 
-      setMessages((prev) => [...prev, { role: "assistant", text: reply }]);
-    }, 800);
-  };
+      setMessages((prev) => {
+        const last = prev[prev.length - 1];
+
+        // create assistant message if not present
+        if (!last || last.role !== "assistant") {
+          return [...prev, { role: "assistant", text: fullReply.slice(0, index) }];
+        }
+
+        // update existing assistant message
+        const updated = [...prev];
+        updated[updated.length - 1] = {
+          role: "assistant",
+          text: fullReply.slice(0, index),
+        };
+
+        return updated;
+      });
+
+      if (index >= fullReply.length) {
+        clearInterval(typingInterval);
+      }
+    }, 18);
+  }, 600);
+};
 
   return (
     <>

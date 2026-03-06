@@ -222,6 +222,8 @@ html, body {
 
 .bubble {
   background: #1c1c22;
+  white-space: pre-wrap;
+  word-break: break-word;
   padding: 14px 18px;
   border-radius: 14px;
   max-width: 75%;
@@ -229,6 +231,17 @@ html, body {
   line-height: 1.55;
   backdrop-filter: blur(6px);
   border: 1px solid rgba(255,255,255,0.05);
+}
+
+.typing-cursor::after {
+  content: "|";
+  animation: blinkCursor 1s infinite;
+}
+
+@keyframes blinkCursor {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 .ai-msg.user .bubble {
