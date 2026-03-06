@@ -281,29 +281,79 @@ footer {
 
 .ai-min-toggle {
   position: fixed;
-  right: 30px;
-  bottom: 40px;   /* ⬅ move to bottom instead of center */
-  width: 52px;
-  height: 52px;
+  right: 40px;
+  bottom: 40px;
+
+  width: 64px;
+  height: 64px;
+
   border-radius: 50%;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
 
   display: flex;
   align-items: center;
   justify-content: center;
 
   font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 1px;
+
+  color: #fff;
+
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255,255,255,0.15),
+    rgba(255,255,255,0.03)
+  );
+
+  border: 1px solid rgba(255,255,255,0.15);
+
+  backdrop-filter: blur(10px);
+
   cursor: pointer;
 
-  z-index: 1200;
-
   transition: all 0.25s ease;
+
+  box-shadow:
+    0 0 20px rgba(255,255,255,0.08),
+    inset 0 0 20px rgba(255,255,255,0.05);
 }
 
 .ai-min-toggle:hover {
-  background: rgba(255,255,255,0.12);
-  transform: scale(1.05);
+  transform: translateY(-4px) scale(1.05);
+
+  box-shadow:
+    0 0 30px rgba(255,255,255,0.2),
+    inset 0 0 20px rgba(255,255,255,0.08);
+}
+
+.ai-min-toggle::after {
+  content: "";
+  position: absolute;
+
+  width: 100%;
+  height: 100%;
+
+  border-radius: 50%;
+
+  border: 1px solid rgba(255,255,255,0.1);
+
+  animation: aiPulse 3s infinite;
+}
+
+@keyframes aiPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+
+  70% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }
 
 .skills-grid {
@@ -499,6 +549,7 @@ footer {
   transform: translateY(-2px);
   transition: 0.2s ease;
 }
+
 
 /* ================= RESPONSIVE ================= */
 

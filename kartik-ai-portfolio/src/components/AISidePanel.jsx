@@ -66,7 +66,7 @@ export default function AISidePanel() {
     <>
       {!open && (
         <div className="ai-min-toggle" onClick={() => setOpen(true)}>
-          AI
+          Ask AI
         </div>
       )}
 
