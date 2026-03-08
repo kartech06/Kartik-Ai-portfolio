@@ -1,0 +1,38 @@
+# dependencies
+node_modules/
+
+# environment variables
+.env
+.env.local
+.env.development
+.env.production
+
+# logs
+logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# embedding cache
+embeddings-cache.json
+
+# temporary files
+tmp/
+temp/
+
+# IDE files
+.vscode/
+.idea/
+
+# build outputs
+dist/
+build/
+
+# coverage reports
+coverage/
+
+# render cache
+.render
